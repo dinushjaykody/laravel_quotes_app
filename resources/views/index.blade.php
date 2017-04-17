@@ -27,7 +27,7 @@
         <h1> Latest Quotes </h1>
         @for($i=0; $i<count($quotes); $i++ )
             <article class="quote {{ $i % 3 === 0 ? 'first-in-line' : ($i + 1) % 3 === 0 ? 'last-in-line' : '' }}">
-                <div class="delete"><a href="#">x</a></div>
+                <div class="delete"><a href="{{route('delete', ['quote_id' => $quotes[$i]->id])}}">x</a></div>
                 {{$quotes[$i]->quote}}
                 <div class="info"> Created By <a href="#">{{$quotes[$i]->author->name}}</a> {{$quotes[$i]->created_at}} </div>
             </article>

@@ -18,7 +18,7 @@ class CreateQuotesTable extends Migration
             $table->timestamps();
             $table->text('quote');
             $table->integer('author_id')->unsigned();
-            $table->foreign('author_id')->references('id')->on('authors');
+            $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
         });
     }
 
