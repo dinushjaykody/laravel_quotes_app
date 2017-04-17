@@ -8,9 +8,20 @@ use App\Quote;
 
 class QuoteController extends Controller
 {
-    public function getIndex()
+    public function getIndex($author = null)
     {
-        $quotes = Quote::all();
+        $quotes = null;
+
+        if(!is_null($author)){
+            $quote_author = Author::where('name',$author)->first();
+            if($quote_author){
+                $quotes = $quote_author->quotes()->orderBy('created_at','desc')->get();
+            }
+
+        } else {
+            $quotes = Quote::orderBy('created_at', 'desc')->get();
+        }
+
         return view('index', ['quotes' => $quotes]);
     }
 

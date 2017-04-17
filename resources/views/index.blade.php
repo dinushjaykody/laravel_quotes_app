@@ -8,6 +8,17 @@
 @endsection
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 @section('content')
+    {{--showing filter section--}}
+    @if(!empty(Request::segment(1)))
+        <section class="filter-bar">
+            A filter has been set !!
+            <div>
+                <a href="{{route('index')}}">Show all quotes</a>
+            </div>
+
+        </section>
+    @endif
+
     @if(count($errors) > 0)
         <section class="info-box fail">
                 @foreach($errors->all() as $error)
@@ -29,7 +40,7 @@
             <article class="quote {{ $i % 3 === 0 ? 'first-in-line' : ($i + 1) % 3 === 0 ? 'last-in-line' : '' }}">
                 <div class="delete"><a href="{{route('delete', ['quote_id' => $quotes[$i]->id])}}">x</a></div>
                 {{$quotes[$i]->quote}}
-                <div class="info"> Created By <a href="#">{{$quotes[$i]->author->name}}</a> {{$quotes[$i]->created_at}} </div>
+                <div class="info"> Created By <a href="{{route('index',['author' => $quotes[$i]->author->name])}}">{{$quotes[$i]->author->name}}</a> {{$quotes[$i]->created_at}} </div>
             </article>
         @endfor
         Pagination
