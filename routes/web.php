@@ -11,7 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [
+    'uses' => 'QuoteController@getIndex',
+    'as' => 'index'
+]);
 
+Route::post('/new', [
+    'uses' => 'QuoteController@postQuote',
+    'as' => 'create'
+]);
