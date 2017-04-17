@@ -8,6 +8,21 @@
 @endsection
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 @section('content')
+    @if(count($errors) > 0)
+        <section class="info-box fail">
+                @foreach($errors->all() as $error)
+                    {{$error}}
+                    <br>
+                @endforeach
+        </section>
+    @endif
+
+    @if(Session::has('success'))
+        <section class="info-box success">
+            {{Session::get('success')}}
+        </section>
+    @endif
+
     <section class="quotes">
         <h1> Latest Quotes </h1>
         @for($i=0; $i<count($quotes); $i++ )

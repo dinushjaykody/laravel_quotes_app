@@ -16,6 +16,12 @@ class QuoteController extends Controller
 
     public function postQuote(Request $request)
     {
+        //validation
+        $this->validate($request, [
+            'author' => 'required|max:60|alpha',
+            'quote' => 'required|max:500'
+        ]);
+
         $authorText = ucfirst($request['author']);
         $quoteText = $request['quote'];
 
