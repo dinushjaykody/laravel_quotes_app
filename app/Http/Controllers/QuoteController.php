@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\QuoteCreated;
 use Illuminate\Http\Request;
 use App\Author;
 use App\Quote;
+use Illuminate\Support\Facades\Event;
 
 class QuoteController extends Controller
 {
@@ -15,11 +17,11 @@ class QuoteController extends Controller
         if(!is_null($author)){
             $quote_author = Author::where('name',$author)->first();
             if($quote_author){
-                $quotes = $quote_author->quotes()->orderBy('created_at','desc')->get();
+                $quotes = $quote_author->quotes()->orderBy('created_at','desc')->paginate(6);
             }
 
         } else {
-            $quotes = Quote::orderBy('created_at', 'desc')->get();
+            $quotes = Quote::orderBy('created_at', 'desc')->paginate(6);
         }
 
         return view('index', ['quotes' => $quotes]);
@@ -29,7 +31,8 @@ class QuoteController extends Controller
     {
         //validation
         $this->validate($request, [
-            'author' => 'required|max:60|alpha',
+            'author' => 'required|max:60',
+            'email' => 'required| email',
             'quote' => 'required|max:500'
         ]);
 
@@ -48,7 +51,11 @@ class QuoteController extends Controller
 
         $quote = new Quote();
         $quote->quote  = $quoteText;
+        $quote->email = $request['email'];
         $author->quotes()->save($quote);
+
+        //calling the QuoteCreated Event
+        Event::fire(new QuoteCreated($author,$request['email']));
 
         return redirect()->route('index')->with([
             'success' => 'Quote Saved'
@@ -64,7 +71,7 @@ class QuoteController extends Controller
             $quote->author->delete();
             $author_deleted = true;
         }
-        //$quote->delete();
+        $quote->delete();
 
         $msg = $author_deleted ? 'Author and Quote Deletd' : 'Quote Deleted';
         return redirect()->route('index')->with(['success' => $msg]);

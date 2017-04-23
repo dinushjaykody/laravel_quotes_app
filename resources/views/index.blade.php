@@ -43,7 +43,16 @@
                 <div class="info"> Created By <a href="{{route('index',['author' => $quotes[$i]->author->name])}}">{{$quotes[$i]->author->name}}</a> {{$quotes[$i]->created_at}} </div>
             </article>
         @endfor
-        Pagination
+
+        <div class="pagination">
+            @if($quotes->currentPage() !== 1)
+                <a href="{{ $quotes->previousPageUrl() }}"><span class="fa fa-caret-left"></span></a>
+            @endif
+
+            @if($quotes->currentPage() !== $quotes->lastPage() && $quotes->hasPages())
+                    <a href="{{ $quotes->nextPageUrl() }}"><span class="fa fa-caret-right"></span></a>
+            @endif
+        </div>
     </section>
 
     <section class="edit-quote">
@@ -53,6 +62,11 @@
             <div class="input-group">
                 <label for="author"> Your Name </label>
                 <input type="text" name="author" id="author" placeholder="Your Name">
+            </div>
+
+            <div class="input-group">
+                <label for="email"> Your E-Mail </label>
+                <input type="text" name="email" id="email" placeholder="Your E-Mail">
             </div>
 
             <div class="input-group">
