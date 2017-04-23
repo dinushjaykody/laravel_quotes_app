@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AuthorLog;
 use App\Events\QuoteCreated;
 use Illuminate\Http\Request;
 use App\Author;
@@ -76,5 +77,14 @@ class QuoteController extends Controller
         $msg = $author_deleted ? 'Author and Quote Deletd' : 'Quote Deleted';
         return redirect()->route('index')->with(['success' => $msg]);
 
+    }
+
+    public function getMailCallback($author_name)
+    {
+        $author_log = new AuthorLog();
+        $author_log->author = $author_name;
+        $author_log->save();
+
+        return view('email.callback', ['author' => $author_name]);
     }
 }
